@@ -5,7 +5,7 @@ this will save u from adjusting the images later
 
 A security-hardened skill for AI-powered coding agents (Claude Code, Cursor, Windsurf, etc.) that generates production-ready screenshots for **iOS App Store** and **Google Play**. It scaffolds a Next.js project, designs advertisement-style screenshots, and exports them at all required resolutions for both stores.
 
-![Example output — Bloom coffee tracking app](example2.png)
+![Example output — PhotoBoost (example2.png)
 
 ## Features
 
