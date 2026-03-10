@@ -16,10 +16,11 @@ If you find a security issue, please open a GitHub issue on this repository.
 ## Hardening Measures
 
 ### Input Validation
-- **Colors**: Validated against CSS color formats; blocks `url()`, `expression()`, `eval()`, `javascript:`, and other injection vectors
+- **Colors**: Validated against CSS color formats (hex, named, rgb/hsl, gradients); blocks `url()`, `expression()`, `eval()`, `javascript:`, and other injection vectors
 - **Font names**: Alphanumeric, spaces, and hyphens only (max 60 chars)
 - **File paths**: Must be relative, no `..`, no null bytes, restricted to image extensions
 - **Text content**: No HTML tags (except `<br />`), no `javascript:` URIs, no template literals
+- **Brand preset files**: All values validated with the same rules as interactive input
 
 ### Dependency Pinning
 - `next@15.1.0` (not `@latest`)
@@ -30,6 +31,12 @@ If you find a security issue, please open a GitHub issue on this repository.
 - "Additional instructions" scoped to visual/design changes only
 - Explicit deny list: no package installs, no shell commands, no file access outside project, no network requests, no disabling security checks
 - No `dangerouslySetInnerHTML`, `eval()`, `new Function()`, or `fetch()` in generated code
+- Safe `<br />` rendering via JSX split pattern (not innerHTML)
+
+### Auto-Detection Safety
+- Detected values (app name, icon, screenshots) are always confirmed with the user before use
+- No silent file operations based on auto-detection
+- Detected file paths validated with the same rules as user-provided paths
 
 ### Installation Scope
 - Project-scoped installation recommended over global installation

@@ -1,15 +1,23 @@
 ### NOTE: MAKE SURE TO USE 6.1 INCH simulator to capture starting screenshots
 this will save u from adjusting the images later
 
-# App Store Screenshots Generator (Safe)
+# App Store & Google Play Screenshots (Safe)
 
-A security-hardened skill for AI-powered coding agents (Claude Code, Cursor, Windsurf, etc.) that generates production-ready App Store screenshots for iOS apps. It scaffolds a Next.js project, designs advertisement-style screenshots, and exports them at all required Apple resolutions.
+A security-hardened skill for AI-powered coding agents (Claude Code, Cursor, Windsurf, etc.) that generates production-ready screenshots for **iOS App Store** and **Google Play**. It scaffolds a Next.js project, designs advertisement-style screenshots, and exports them at all required resolutions for both stores.
 
 ![Example output — Bloom coffee tracking app](example.png)
 
-## Security Built In
+## Features
 
-This skill was built with security as a first-class concern:
+- **Dual-store support** — iOS App Store (4 sizes) + Google Play (phone, 7", 10") in one project
+- **Brand presets** — define your brand once in `.app-screenshots/brand.yml`, skip repeat setup
+- **Auto-detection** — finds app name, icon, and screenshots from Xcode/Android projects
+- **Self-verification** — agent checks its own output (legibility, layout variety, exports) before showing you
+- **Category-aware copy** — microcopy examples for fitness, productivity, finance, social, and utilities
+- **Thumbnail legibility test** — verifies headlines are readable at browse size, not just full resolution
+- **Organized exports** — `exports/ios/` and `exports/google-play/` folders, ready for upload
+
+## Security Built In
 
 | Protection | Details |
 |------------|---------|
@@ -22,18 +30,25 @@ This skill was built with security as a first-class concern:
 | **Scoped instructions** | "Additional instructions" limited to visual/design — cannot install packages, run commands, or access files outside project |
 | **Filename sanitization** | Non-alphanumeric chars stripped from export filenames |
 
-## What it does
+## Brand Preset (skip repeat setup)
 
-- Asks you about your app's brand, features, and style preferences
-- Scaffolds a minimal Next.js project (or works within an existing one)
-- Designs each screenshot as an **advertisement** — not a UI showcase
-- Writes compelling copy using proven App Store copywriting patterns
-- Renders screenshots at full resolution with a built-in iPhone mockup
-- Exports PNGs at all 4 Apple-required sizes (6.9", 6.5", 6.3", 6.1")
+Create `.app-screenshots/brand.yml` in your project root:
 
-## Included assets
+```yaml
+brand:
+  colors:
+    accent: "#4A90D9"
+    text: "#1A1A2E"
+    background: "linear-gradient(135deg, #667eea, #764ba2)"
+  font: "Inter"
+  style: "clean/minimal"
+  icon: "public/app-icon.png"
+stores:
+  - ios
+  - google-play
+```
 
-- `mockup.png` — Pre-measured iPhone frame with transparent screen area
+When this file exists, the skill skips brand-related questions and only asks about screenshots, features, and slide count.
 
 ## Install
 
@@ -74,23 +89,24 @@ git clone https://github.com/ofirkris/app-store-screenshots-safe ~/.claude/skill
 Once installed, the skill triggers automatically when you ask your agent to:
 
 - Build App Store screenshots
-- Generate marketing screenshots for an iOS app
-- Create exportable screenshot assets
+- Generate Google Play screenshots
+- Create marketing screenshots for my iOS/Android app
+- Build screenshots for both stores
 
 Or just tell your agent what you need:
 
 ```
-> Build App Store screenshots for my app
+> Build App Store and Google Play screenshots for my app
 ```
 
-It will ask you about your app's screenshots, brand colors, font, features, style direction, and number of slides before building anything.
+It will auto-detect what it can from your project, then ask about the rest.
 
 ## What gets scaffolded
 
-If starting from an empty folder, the skill creates:
-
 ```
 project/
+├── .app-screenshots/
+│   └── brand.yml           # Brand preset (optional, you create this)
 ├── public/
 │   ├── mockup.png          # iPhone frame (copied from skill)
 │   ├── app-icon.png        # Your app icon
@@ -98,6 +114,9 @@ project/
 ├── src/app/
 │   ├── layout.tsx          # Font setup
 │   └── page.tsx            # Screenshot generator (single file)
+├── exports/                # Organized export output
+│   ├── ios/
+│   └── google-play/
 ├── package.json
 └── ...
 ```
@@ -106,6 +125,8 @@ The entire generator is a **single `page.tsx` file**. Run the dev server, open t
 
 ## Export sizes
 
+### iOS App Store
+
 | Display | Resolution |
 |---------|-----------|
 | 6.9" | 1320 x 2868 |
@@ -113,7 +134,13 @@ The entire generator is a **single `page.tsx` file**. Run the dev server, open t
 | 6.3" | 1206 x 2622 |
 | 6.1" | 1125 x 2436 |
 
-Screenshots are designed at 1320x2868 (largest) and scaled down for smaller sizes.
+### Google Play
+
+| Device | Resolution |
+|--------|-----------|
+| Phone | 1080 x 1920 |
+| 7" Tablet | 1080 x 1920 |
+| 10" Tablet | 1920 x 1200 (landscape) |
 
 ## Tech stack
 
@@ -128,9 +155,11 @@ Screenshots are designed at 1320x2868 (largest) and scaled down for smaller size
 ## Key design principles
 
 - **Screenshots are ads, not docs** — each slide sells one idea
-- **Copy follows the "one second" rule** — readable at thumbnail size in the App Store
+- **Copy follows the "one second" rule** — readable at thumbnail size in both stores
+- **Google Play needs tighter copy** — 2-4 words per line (smaller thumbnails than App Store)
 - **Layouts vary** — no two adjacent slides share the same phone placement
 - **Style is user-driven** — no hardcoded colors, gradients, or fonts
+- **Agent self-verifies** — checks output before showing you, reducing iteration rounds
 
 ## Requirements
 
